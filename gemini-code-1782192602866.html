@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThinkFluency Academy | Prof. Jefferson Arriola</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* VARIABLES DE COLOR (Dorado Premium) */
+    :root {
+      --bg-primary: #111111;       /* Fondo principal oscuro/neutro */
+      --bg-card: rgba(30, 30, 30, 0.7); /* Tarjetas semi-transparentes */
+      
+      /* COLORES DE CONTRASTE SUTILES */
+      --accent-color: #d4af37;     /* Color principal (Dorado) */
+      --accent-secondary: #f3e5ab; /* Color secundario brillante (Ámbar) */
+      --accent-particles: #d4af37; /* Color de partículas */
+      
+      --text-main: #f8fafc;        /* Blanco suave */
+      --text-muted: #94a3b8;       /* Gris claro */
+      --font-headings: 'Montserrat', sans-serif;
+      --font-body: 'Poppins', sans-serif;
+    }
+
+    /* Reset global */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* FONDO ESTÁTICO Y PARTICULAS */
+    #bg-logo-static {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 65vw;
+      max-width: 600px;
+      opacity: 0.05; 
+      z-index: -2;
+      pointer-events: none;
+      filter: grayscale(100%); 
+    }
+
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* CONTENEDORES Y DISEÑO */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 0;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 0 20px 0;
+    }
+
+    .logo-header {
+      max-width: 140px;
+      margin-bottom: 15px;
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    h1 {
+      font-family: var(--font-headings);
+      font-weight: 800;
+      font-size: 2.5rem;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--text-main), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+      font-family: var(--font-headings);
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      text-align: center;
+      color: #ffffff;
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+      margin: 10px auto 0 auto;
+      border-radius: 2px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-top: 5px;
+    }
+
+    /* ANUNCIO DE DESCUENTO */
+    .promo-banner {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(30, 30, 30, 0.9));
+      border: 1px solid var(--accent-color);
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      margin-bottom: 40px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.1);
+      animation: pulsePromo 2.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulsePromo {
+      0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.1); border-color: rgba(212, 175, 55, 0.5); }
+      100% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); border-color: var(--accent-color); }
+    }
+
+    .promo-banner p {
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .promo-banner strong {
+      color: var(--accent-color);
+      font-weight: 800;
+      font-size: 1.3rem;
+    }
+
+    /* SECCIÓN DOCENTE */
+    .profile-section {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 40px;
+      margin-top: 30px;
+      display: flex;
+      flex-direction: row;
+      gap: 40px;
+      align-items: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-section::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background: linear-gradient(to top, var(--bg-primary), transparent);
+      z-index: 1;
+    }
+
+    .profile-photo-wrapper {
+      flex: 1;
+      max-width: 320px;
+      position: relative;
+    }
+
+    .profile-photo {
+      width: 100%;
+      border-radius: 20px;
+      border: 2px solid var(--accent-color);
+      display: block;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); 
+    }
+
+    .profile-info {
+      flex: 2;
+      z-index: 2;
+    }
+
+    .profile-info h3 {
+      font-family: var(--font-headings);
+      font-size: 1.8rem;
+      color: var(--accent-color);
+      margin-bottom: 5px;
+    }
+
+    .degree {
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 15px;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bio-text {
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-size: 1.05rem;
+      text-align: justify;
+    }
+
+    .badges-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--accent-color);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* SECCIÓN MISIÓN Y VISIÓN RESALTADA */
+    .mv-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .mv-card {
+      background: rgba(20, 20, 20, 0.8);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 20px;
+      padding: 35px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .mv-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-color);
+    }
+
+    .mv-card i {
+      font-size: 2.5rem;
+      color: var(--accent-color);
+      margin-bottom: 15px;
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    }
+
+    .mv-card h3 {
+      font-family: var(--font-headings);
+      font-size: 1.5rem;
+      color: #ffffff;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+
+    .mv-card p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      text-align: justify;
+    }
+
+    /* SECCIÓN CURSOS (Actualizada a 4 columnas/responsivo) */
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+    }
+
+    .course-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 25px;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .course-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-color);
+    }
+
+    .course-tag {
+      align-self: flex-start;
+      background: linear-gradient(135deg, var(--accent-secondary), var(--accent-color));
+      color: #111;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      margin-bottom: 15px;
+    }
+
+    .course-card h3 {
+      font-family: var(--font-headings);
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+    }
+
+    .course-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+
+    .course-meta {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 15px;
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+
+    .course-meta p {
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* CARRUSEL DE TESTIMONIOS */
+    .carousel-section {
+      overflow: hidden;
+      position: relative;
+      padding: 40px 0;
+    }
+
+    .carousel-container {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      padding: 20px 0;
+    }
+
+    .carousel-viewport {
+      overflow: hidden;
+      width: 100%;
+      padding: 30px 0;
+    }
+
+    .carousel-track {
+      display: flex;
+      align-items: center;
+    }
+
+    .testimonial-slide {
+      min-width: 400px;
+      max-width: 400px;
+      margin: 0 20px;
+      transition: transform 0.6s ease, filter 0.6s ease, box-shadow 0.6s ease;
+      transform: scale(0.85);
+      filter: brightness(0.4) blur(2px);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+      cursor: pointer; 
+    }
+
+    .testimonial-slide img {
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none;
+    }
+
+    .testimonial-slide.active {
+      transform: scale(1.1);
+      filter: brightness(1) blur(0px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+      z-index: 5;
+      border: 1px solid var(--accent-color);
+    }
+
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--accent-color);
+      color: var(--accent-color);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease, transform 0.3s ease;
+      z-index: 10;
+    }
+
+    .carousel-arrow:hover {
+      background: var(--accent-color);
+      color: #111;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .arrow-prev { left: -60px; }
+    .arrow-next { right: -60px; }
+
+    @media (max-width: 768px) {
+      .testimonial-slide {
+        min-width: 280px;
+        max-width: 280px;
+        margin: 0 10px;
+      }
+      .carousel-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+      .arrow-prev { left: 0px; }
+      .arrow-next { right: 0px; }
+    }
+
+    /* ESTILOS DEL MODAL */
+    .modal {
+      display: none; 
+      position: fixed;
+      z-index: 1000; 
+      padding-top: 50px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.9); 
+      cursor: pointer; 
+    }
+
+    .modal-content {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 800px;
+      border-radius: 12px;
+      border: 2px solid var(--accent-color);
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+      animation: zoom 0.6s;
+    }
+
+    @keyframes zoom {
+      from {transform:scale(0)} 
+      to {transform:scale(1)}
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+      z-index: 1001;
+    }
+
+    .close-modal:hover,
+    .close-modal:focus {
+      color: var(--accent-color);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    @media only screen and (max-width: 700px){
+      .modal-content {
+        width: 95%;
+      }
+    }
+
+    /* FORMULARIO DE REGISTRO */
+    .form-wrapper {
+      max-width: 600px;
+      margin: 40px auto 0 auto;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 40px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #e2e8f0;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      color: #ffffff;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      margin-top: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .profile-section {
+        flex-direction: column;
+        text-align: center;
+        padding: 25px;
+      }
+      .profile-photo-wrapper {
+        max-width: 200px;
+      }
+      .bio-text {
+        text-align: center;
+      }
+      .badges-grid {
+        justify-content: center;
+      }
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <img id="bg-logo-static" src="https://raw.githubusercontent.com/thinkfluency-ni/joinus/main/WhatsApp%20Image%202026-06-22%20at%2010.46.45%20PM.jpeg" alt="Logo Fondo Background">
+
+  <canvas id="particles-canvas"></canvas>
+
+  <header>
+    <img class="logo-header" src="https://raw.githubusercontent.com/thinkfluency-ni/joinus/main/WhatsApp%20Image%202026-06-22%20at%2010.46.45%20PM.jpeg" alt="ThinkFluency Academy Logo">
+    <h1>ThinkFluency Academy</h1>
+    <p class="subtitle">Aprende inglés sin rodeos tradicionales ni aburridos</p>
+  </header>
+
+  <main class="container">
+    
+    <div class="promo-banner">
+      <p>🔥 <strong>¡PROMO ESPECIAL!</strong> Estamos dando descuentos de hasta el <strong>50%</strong>. ¡Aprender inglés nunca fue tan accesible como ahora! 🚀</p>
+    </div>
+
+    <section>
+      <div class="profile-section">
+        <div class="profile-photo-wrapper">
+          <img class="profile-photo" src="https://raw.githubusercontent.com/thinkfluency-ni/joinus/main/WhatsApp%20Image%202026-06-22%20at%2010.49.20%20PM.jpeg" alt="Profesor Jefferson Arriola">
+        </div>
+        <div class="profile-info">
+          <h3>Prof. Jefferson Arriola</h3>
+          <div class="degree">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Lic. en Pedagogía con mención en Inglés (UNAN-Managua)</span>
+          </div>
+          <p class="bio-text">
+            Con más de 5 años de experiencia en las aulas, he perfeccionado un enfoque de enseñanza 100% práctico y comunicativo. Mi trayectoria incluye haber trabajado para instituciones de prestigio como <strong>Keiser University</strong> (donde fui galardonado como Teacher of the Month), el <strong>MINED</strong> y <strong>ETNS</strong>, sumado a una sólida experiencia en la industria de Call Centers. Mi objetivo es romper las barreras del miedo: crear confianza y hablar desde el primer día son la clave real para dominar el inglés.
+          </p>
+          <div class="badges-grid">
+            <div class="badge"><i class="fa-solid fa-award"></i> Certificado VELS por Ibex</div>
+            <div class="badge"><i class="fa-solid fa-star"></i> Teacher of the Month (Keiser)</div>
+            <div class="badge"><i class="fa-solid fa-briefcase"></i> 5+ Años de Experiencia</div>
+            <div class="badge"><i class="fa-solid fa-comments"></i> Enfoque Práctico-Comunicativo</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top: 60px;">
+      <h2>Nuestros Pilares Fundamentales</h2>
+      <div class="mv-grid">
+        <div class="mv-card">
+          <i class="fa-solid fa-bullseye"></i>
+          <h3>MISIÓN</h3>
+          <p>Brindar una enseñanza del idioma inglés totalmente práctica, interactiva y de alta calidad, rompiendo por completo los esquemas tradicionales y aburridos. Nos enfocamos en empoderar a cada estudiante para que desarrolle la confianza y fluidez necesarias para alcanzar el éxito laboral y personal en un entorno global.</p>
+        </div>
+        <div class="mv-card">
+          <i class="fa-solid fa-eye"></i>
+          <h3>VISIÓN</h3>
+          <p>Convertirnos en la academia de idiomas líder y de mayor impacto en Rivas y toda Nicaragua, siendo reconocidos por nuestra innovación pedagógica, efectividad en la inserción laboral de nuestros graduados y por transformar el aprendizaje del inglés en una experiencia accesible, natural y altamente motivadora.</p>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top: 80px;">
+      <h2>Nuestros Programas Académicos</h2>
+      <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Modalidades presenciales y virtuales estructuradas para ayudarte a dominar el inglés paso a paso.</p>
+      
+      <div class="courses-grid">
+        <div class="course-card">
+          <div>
+            <div class="course-tag">Niños</div>
+            <h3>PPL: Phono-Lab Play</h3>
+            <p class="course-desc">Un espacio dinámico donde los más pequeños aprenden inglés jugando y estimulando la fonética correcta desde temprana edad de forma natural.</p>
+          </div>
+          <div class="course-meta">
+            <p><i class="fa-solid fa-calendar-days"></i> Fin de Semana o Diario</p>
+          </div>
+        </div>
+        <div class="course-card">
+          <div>
+            <div class="course-tag">Adolescentes</div>
+            <h3>SSP: Syntax Studio Program</h3>
+            <p class="course-desc">Diseñado para jóvenes que buscan consolidar sus bases gramaticales, fluidez de conversación y mejorar sustancialmente su rendimiento académico.</p>
+          </div>
+          <div class="course-meta">
+            <p><i class="fa-solid fa-calendar-days"></i> Fin de Semana o Diario</p>
+          </div>
+        </div>
+        <div class="course-card">
+          <div>
+            <div class="course-tag">Adultos</div>
+            <h3>ALP: Applied Linguistic Program</h3>
+            <p class="course-desc">Enfoque acelerado y laboral. Ideal para quienes necesitan hablar con fluidez, aplicar a puestos en Call Centers o expandir sus oportunidades profesionales.</p>
+          </div>
+          <div class="course-meta">
+            <p><i class="fa-solid fa-calendar-days"></i> Fin de Semana o Diario</p>
+          </div>
+        </div>
+        <div class="course-card">
+          <div>
+            <div class="course-tag">Global</div>
+            <h3>OLP: Online Linguistic Program</h3>
+            <p class="course-desc">Nuestra modalidad 100% virtual interactiva. Aprende desde cualquier lugar con clases dinámicas en vivo, horarios flexibles y el mismo enfoque comunicativo real.</p>
+          </div>
+          <div class="course-meta">
+            <p><i class="fa-solid fa-laptop"></i> En Línea (Lunes a Viernes)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top: 80px;">
+      <h2>Recomendaciones de Estudiantes</h2>
+      <div class="carousel-section">
+        <div class="carousel-container" id="carousel-section-container">
+          <button class="carousel-arrow arrow-prev" id="prev-btn"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="carousel-arrow arrow-next" id="next-btn"><i class="fa-solid fa-chevron-right"></i></button>
+          <div class="carousel-viewport">
+            <div class="carousel-track" id="carousel-track">
+              <div class="testimonial-slide"><img src="https://raw.githubusercontent.com/thinkfluency-ni/joinus/main/Gemini_Generated_Image_6dcdnj6dcdnj6dcd.png" alt="Testimonio 1"></div>
+              <div class="testimonial-slide"><img src="https://raw.githubusercontent.com/thinkfluency-ni/joinus/main/Gemini_Generated_Image_6klere6klere6kle.png" alt="Testimonio 2"></div>
+              <div class="testimonial-slide"><img src="https://raw.githubusercontent.com/thinkfluency-ni/joinus/main/Gemini_Generated_Image_9blkd99blkd99blk.png" alt="Testimonio 3"></div>
+              <div class="testimonial-slide"><img src="https://raw.githubusercontent.com/thinkfluency-ni/joinus/main/Gemini_Generated_Image_fb4t5lfb4t5lfb4t.png" alt="Testimonio 4"></div>
+              <div class="testimonial-slide"><img src="https://raw.githubusercontent.com/thinkfluency-ni/joinus/main/Gemini_Generated_Image_fcwi9ofcwi9ofcwi.png" alt="Testimonio 5"></div>
+              <div class="testimonial-slide"><img src="https://raw.githubusercontent.com/thinkfluency-ni/joinus/main/Gemini_Generated_Image_q4ohncq4ohncq4oh.png" alt="Testimonio 6"></div>
+              <div class="testimonial-slide"><img src="https://raw.githubusercontent.com/thinkfluency-ni/joinus/main/Gemini_Generated_Image_rt0kkort0kkort0k.png" alt="Testimonio 7"></div>
+              <div class="testimonial-slide"><img src="https://raw.githubusercontent.com/thinkfluency-ni/joinus/main/Gemini_Generated_Image_xne0lpxne0lpxne0.png" alt="Testimonio 8"></div>
+              <div class="testimonial-slide"><img src="https://raw.githubusercontent.com/thinkfluency-ni/joinus/main/WhatsApp%20Image%202026-06-22%20at%209.46.26%20PM.jpeg" alt="Testimonio 9"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top: 60px;" id="inscripcion">
+      <h2>Reserva tu Cupo / Solicita Información</h2>
+      <div class="form-wrapper">
+        <form id="whatsapp-form">
+          <div class="form-group">
+            <label for="student-name">Nombre Completo del Estudiante:</label>
+            <input type="text" id="student-name" placeholder="Ej. Juan Pérez" required>
+          </div>
+          <div class="form-group">
+            <label for="course-select">Programa de Interés:</label>
+            <select id="course-select" required>
+              <option value="" disabled selected>Selecciona un programa...</option>
+              <option value="PPL: Phono-Lab Play (Niños)">PPL: Phono-Lab Play (Niños)</option>
+              <option value="SSP: Syntax Studio Program (Teenagers)">SSP: Syntax Studio Program (Teenagers)</option>
+              <option value="ALP: Applied Linguistic Program (Adultos)">ALP: Applied Linguistic Program (Adultos)</option>
+              <option value="OLP: Online Linguistic Program (En Línea)">OLP: Online Linguistic Program (En Línea)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="day-select">Modalidad de Preferencia:</label>
+            <select id="day-select" required>
+              <option value="" disabled selected>Selecciona una modalidad...</option>
+              <option value="Sábados">Sábados</option>
+              <option value="Domingos">Domingos</option>
+              <option value="Diario tardes 2-4 pm">Diario tardes 2-4 pm</option>
+              <option value="En Línea (Horarios flexibles)">En Línea (Horarios flexibles)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="additional-msg">Mensaje o consulta adicional (Opcional):</label>
+            <textarea id="additional-msg" rows="3" placeholder="¿Tienes alguna duda en específico? Escríbela aquí..."></textarea>
+          </div>
+          <button type="button" class="btn-submit" onclick="enviarRegistroWhatsApp()">
+            <i class="fa-brands fa-whatsapp"></i> Enviar al WhatsApp Business
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div id="imageModal" class="modal">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="imgAmpliada">
+  </div>
+
+  <footer>
+    <p>&copy; 2026 ThinkFluency Academy - Rivas, Nicaragua. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    /* 1. PARTICULAS (Dorado) */
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+    let particlesArray = [];
+    const numberOfParticles = 30;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 0.4 - 0.2;
+        this.speedY = Math.random() * -0.5 - 0.1;
+        this.alpha = Math.random() * 0.4 + 0.1;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.y < 0) {
+          this.y = canvas.height;
+          this.x = Math.random() * canvas.width;
+        }
+        if (this.x < 0 || this.x > canvas.width) this.speedX = -this.speedX;
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent-particles').trim();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+    function initParticles() {
+      particlesArray = [];
+      for (let i = 0; i < numberOfParticles; i++) particlesArray.push(new Particle());
+    }
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw();
+      }
+      requestAnimationFrame(animateParticles);
+    }
+    initParticles();
+    animateParticles();
+
+    /* 2. CARRUSEL INFINITO PERFECTO CON FLECHAS Y AUTOPLAY DE 20s */
+    const track = document.getElementById('carousel-track');
+    const container = document.getElementById('carousel-section-container');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    
+    const originalSlides = Array.from(track.children);
+    originalSlides.forEach(slide => {
+      const clone = slide.cloneNode(true);
+      track.appendChild(clone);
+    });
+    
+    let slides = Array.from(track.children);
+    let currentIndex = 0;
+    let autoPlayInterval;
+    let isTransitioning = false;
+
+    function updateCarousel() {
+      const containerWidth = container.offsetWidth;
+      const slideElement = slides[0];
+      if(!slideElement) return;
+      const slideWidth = slideElement.offsetWidth;
+      const styles = window.getComputedStyle(slideElement);
+      const marginLeft = parseFloat(styles.marginLeft);
+      const marginRight = parseFloat(styles.marginRight);
+      const totalSlideWidth = slideWidth + marginLeft + marginRight;
+
+      const offset = -currentIndex * totalSlideWidth + (containerWidth / 2) - (totalSlideWidth / 2);
+      track.style.transform = `translateX(${offset}px)`;
+
+      slides.forEach((slide, index) => {
+        if (index === currentIndex % originalSlides.length) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+    }
+
+    function nextSlide() {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      track.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+      currentIndex++;
+      updateCarousel();
+
+      if (currentIndex === originalSlides.length) {
+        setTimeout(() => {
+          track.style.transition = 'none'; 
+          currentIndex = 0; 
+          updateCarousel();
+          isTransitioning = false;
+        }, 600); 
+      } else {
+        setTimeout(() => { isTransitioning = false; }, 600);
+      }
+    }
+
+    function prevSlide() {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      track.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+      
+      if (currentIndex === 0) {
+        track.style.transition = 'none';
+        currentIndex = originalSlides.length;
+        updateCarousel();
+        requestAnimationFrame(() => {
+          track.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+          currentIndex--;
+          updateCarousel();
+          setTimeout(() => { isTransitioning = false; }, 600);
+        });
+      } else {
+        currentIndex--;
+        updateCarousel();
+        setTimeout(() => { isTransitioning = false; }, 600);
+      }
+    }
+
+    function startAutoPlay() {
+      stopAutoPlay(); 
+      autoPlayInterval = setInterval(nextSlide, 20000); 
+    }
+    function stopAutoPlay() {
+      clearInterval(autoPlayInterval);
+    }
+
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      startAutoPlay(); 
+    });
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      startAutoPlay(); 
+    });
+
+    container.addEventListener('mouseenter', stopAutoPlay);
+    container.addEventListener('mouseleave', startAutoPlay);
+
+    window.addEventListener('resize', updateCarousel);
+    startAutoPlay();
+    setTimeout(updateCarousel, 150);
+
+    /* 3. LÓGICA PARA AMPLIAR IMAGEN AL DAR CLIC */
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("imgAmpliada");
+    const spanClose = document.getElementsByClassName("close-modal")[0];
+
+    track.addEventListener('click', (e) => {
+      const slide = e.target.closest('.testimonial-slide');
+      if (slide) {
+        const img = slide.querySelector('img');
+        if (img) {
+          stopAutoPlay(); 
+          modal.style.display = "block";
+          modalImg.src = img.src;
+        }
+      }
+    });
+
+    spanClose.onclick = function() {
+      modal.style.display = "none";
+      startAutoPlay(); 
+    }
+
+    modal.onclick = function(e) {
+      if (e.target === modal) {
+        modal.style.display = "none";
+        startAutoPlay(); 
+      }
+    }
+
+    /* 4. LÓGICA WHATSAPP */
+    function enviarRegistroWhatsApp() {
+      const nombre = document.getElementById('student-name').value.trim();
+      const curso = document.getElementById('course-select').value;
+      const dia = document.getElementById('day-select').value;
+      const mensajeAdicional = document.getElementById('additional-msg').value.trim();
+
+      if (!nombre || !curso || !dia) {
+        alert("Por favor, rellene todos los campos obligatorios antes de enviar.");
+        return;
+      }
+
+      const telefonoBusiness = "50586665194"; 
+      let textoMensaje = `¡Hola, ThinkFluency Academy! 👋\n\nMe interesa registrarme en sus cursos. Aquí mis datos:\n\n📌 *Nombre:* ${nombre}\n📚 *Programa:* ${curso}\n🗓️ *Modalidad de Preferencia:* ${dia}\n`;
+      if (mensajeAdicional) textoMensaje += `✉️ *Consulta adicional:* ${mensajeAdicional}\n`;
+
+      const mensajeUrl = encodeURIComponent(textoMensaje);
+      const urlFinal = `https://wa.me/${telefonoBusiness}?text=${mensajeUrl}`;
+      window.open(urlFinal, '_blank');
+    }
+  </script>
+</body>
+</html>
